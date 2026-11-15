@@ -1,25 +1,24 @@
-# Team Task Manager — Batch Script
+# Hexa
 
-A command-line task management system built for a real company team of 4 people.
-Developed in Batch Script due to environment limitations (Python unavailable on target machines).
+Aplicativo pessoal: faculdade, estúdio de edição freelancer, projetos, finanças e progressão (seis atributos, ranks E→S) em um só lugar, com um motor que diz por onde começar e um Copiloto com IA.
 
-## Features
-- Add tasks with responsible person, date and description
-- View tasks scheduled for today (automatic alert system)
-- List all saved tasks
-- Auto-initializer on system startup
-- Flat-file database (no external dependencies)
-- Full UTF-8 support for special characters
+## Rodar
 
-## How it works
-Tasks are saved in a simple pipe-delimited `.txt` file.
-The system filters tasks by today's date and alerts the team automatically.
+```bash
+npm install
+npm run dev            # desenvolvimento
+npm test               # testes da lógica
+npm run build          # site estático (PWA) em dist/
+npm run build:artifact # arquivo único em dist-artifact/hexa.html (Artifact do claude.ai)
+```
 
-## Files
-- `tarefas.bat` — main system (menu, add, list, filter)
-- `inicializador.bat` — auto-runs on startup
+## Arquitetura
 
-## Tech
-- Windows Batch Script
-- File-based persistence
-- Built for a real production environment
+- `src/lib` — dados e regras, sem interface: `engine` (sinais, ranking, linha do tempo), `capture` (captura em linguagem natural), `xp`, `academics`, `finance`, `actions` (toda alteração de estado), `persist` (localStorage + banco privado do Artifact).
+- `src/ai` — Copiloto: `provider` (Claude da conta no Artifact, ou API da Anthropic com chave própria no build independente), `context`, `protocol` (ações propostas em JSON, aplicadas só com confirmação), `local` (análises por regras quando não há IA).
+- `src/features` — telas. `src/ui` — componentes base. `src/styles/app.css` — sistema visual.
+
+## Onde os dados ficam
+
+- Como Artifact: documentos privados por usuário (`data/users/<id>/`), sincronizados entre aparelhos.
+- Build independente: `localStorage` do navegador. Use Ajustes → Exportar backup.
